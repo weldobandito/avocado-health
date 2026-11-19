@@ -474,6 +474,64 @@ footer a:hover{text-decoration:underline}
   .btn:hover{transform:none}
   .bcard:hover,.voice-card:hover{transform:none}
 }
+
+/* Calculator */
+.calc-section{padding:100px 0;background:var(--mint)}
+.calc-card{
+  background:#fff;border-radius:20px;
+  box-shadow:0 20px 60px -20px rgba(13,63,54,.18);
+  max-width:680px;margin:0 auto;overflow:hidden;
+}
+.calc-inputs{padding:40px 40px 24px}
+.calc-row{margin-bottom:24px}
+.calc-row label{
+  display:block;font-size:.95rem;font-weight:600;
+  color:var(--ink);margin-bottom:8px;line-height:1.4;
+}
+.calc-input-wrap{position:relative;max-width:160px}
+.calc-input-wrap input{
+  width:100%;padding:12px 16px;font-size:1.15rem;font-weight:700;
+  font-family:inherit;color:var(--teal-ink);
+  border:2px solid var(--line);border-radius:12px;
+  background:var(--mint);outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  -moz-appearance:textfield;
+}
+.calc-input-wrap input::-webkit-outer-spin-button,
+.calc-input-wrap input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.calc-input-wrap input:focus{border-color:var(--teal);box-shadow:0 0 0 4px rgba(42,173,150,.15)}
+.calc-unit{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-size:.95rem;font-weight:600;color:var(--body);pointer-events:none;
+}
+.calc-results{
+  background:var(--grad-teal);padding:32px 40px;
+}
+.calc-result-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;
+}
+.calc-result-row+.calc-result-row{border-top:1px solid rgba(255,255,255,.2)}
+.calc-result-label{font-size:.95rem;color:rgba(255,255,255,.85);max-width:60%}
+.calc-result-val{
+  font-size:1.3rem;font-weight:800;color:#fff;
+  letter-spacing:-.01em;
+}
+.calc-result-big .calc-result-val{
+  font-size:clamp(1.6rem,4vw,2.2rem);
+  text-shadow:0 2px 12px rgba(0,0,0,.15);
+}
+.calc-result-big .calc-result-label{font-weight:600;color:#fff}
+.calc-footnote{
+  padding:20px 40px;font-size:.88rem;color:var(--body);
+  background:#fff;line-height:1.5;
+}
+@media(max-width:640px){
+  .calc-inputs{padding:28px 24px 16px}
+  .calc-results{padding:24px}
+  .calc-footnote{padding:16px 24px}
+  .calc-result-row{flex-direction:column;align-items:flex-start;gap:4px}
+}
 </style>
 </head>
 <body>
@@ -779,6 +837,50 @@ footer a:hover{text-decoration:underline}
   </div>
 </section>
 
+<!-- TIME-SAVINGS CALCULATOR -->
+<section class="calc-section" aria-labelledby="calc-h">
+  <div class="wrap">
+    <div class="narrow reveal" style="text-align:center;margin-bottom:40px">
+      <h2 id="calc-h">How much is your time actually worth?</h2>
+      <p class="lede" style="max-width:50ch;margin:0 auto">Most influencers spend hours every day answering the same parenting questions. Here's what that time is really costing you.</p>
+    </div>
+    <div class="calc-card reveal">
+      <div class="calc-inputs">
+        <div class="calc-row">
+          <label for="calc-q">How many questions do you answer from parents daily?</label>
+          <div class="calc-input-wrap"><input type="number" id="calc-q" value="5" min="0" max="200"></div>
+        </div>
+        <div class="calc-row">
+          <label for="calc-pct">What % are lower acuity (don't need your direct expertise)?</label>
+          <div class="calc-input-wrap"><input type="number" id="calc-pct" value="70" min="0" max="100"><span class="calc-unit">%</span></div>
+        </div>
+        <div class="calc-row">
+          <label for="calc-hrs">Hours per day you spend answering questions</label>
+          <div class="calc-input-wrap"><input type="number" id="calc-hrs" value="2" min="0" max="24" step="0.5"></div>
+        </div>
+        <div class="calc-row">
+          <label for="calc-rate">What's the value of your time per hour?</label>
+          <div class="calc-input-wrap"><span class="calc-unit" style="left:12px;right:auto">$</span><input type="number" id="calc-rate" value="250" min="0" max="10000" style="padding-left:28px"></div>
+        </div>
+      </div>
+      <div class="calc-results">
+        <div class="calc-result-row">
+          <span class="calc-result-label">Hours spent answering questions per year</span>
+          <span class="calc-result-val" id="calc-hours-yr">511</span>
+        </div>
+        <div class="calc-result-row calc-result-big">
+          <span class="calc-result-label">Estimated value of time you could save per year</span>
+          <span class="calc-result-val" id="calc-value-yr">$127,750</span>
+        </div>
+      </div>
+      <p class="calc-footnote">Avocado Health handles the lower-acuity questions for you, so you can spend that time on content, family, or just living your life.</p>
+    </div>
+    <div class="cta-row reveal" style="margin-top:32px">
+      <a class="btn" href="#book">See what that looks like for you <span class="arrow" aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
 <!-- LEGACY -->
 <section class="legacy" aria-labelledby="legacy-h">
   <div class="ambient" aria-hidden="true">
@@ -983,6 +1085,28 @@ footer a:hover{text-decoration:underline}
       cio.observe(counter);
     }
   }
+})();
+</script>
+
+<script>
+(function(){
+  var q=document.getElementById('calc-q'),
+      pct=document.getElementById('calc-pct'),
+      hrs=document.getElementById('calc-hrs'),
+      rate=document.getElementById('calc-rate'),
+      hoursOut=document.getElementById('calc-hours-yr'),
+      valueOut=document.getElementById('calc-value-yr');
+  function calc(){
+    var d=parseFloat(hrs.value)||0,
+        p=(parseFloat(pct.value)||0)/100,
+        r=parseFloat(rate.value)||0,
+        hrsYr=Math.round(d*p*365),
+        val=hrsYr*r;
+    hoursOut.textContent=hrsYr.toLocaleString();
+    valueOut.textContent='$'+val.toLocaleString();
+  }
+  [q,pct,hrs,rate].forEach(function(el){el.addEventListener('input',calc)});
+  calc();
 })();
 </script>
 
